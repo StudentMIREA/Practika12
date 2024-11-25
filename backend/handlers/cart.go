@@ -40,8 +40,8 @@ func AddToCart(db *sqlx.DB) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректные данные"})
 			return
 		}
-		_, err := db.Exec("INSERT INTO cart (user_id, product_id, count) VALUES ((SELECT id FROM users WHERE mail = $1), $2, $3)",
-			userId, product.ID, product.Count)
+		_, err := db.Exec("INSERT INTO cart (user_id, product_id, count) VALUES ((SELECT id FROM users WHERE mail = $1), $2, 1)",
+			userId, product.ID)
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка добавления в корзину"})

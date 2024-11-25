@@ -4,6 +4,7 @@ import 'package:pr12/Pages/ItemPage.dart';
 import 'package:pr12/api_service.dart';
 import 'package:pr12/auth/auth_service.dart';
 import 'package:pr12/model/items.dart';
+import 'package:pr12/pages/FiltersPage.dart';
 
 class ItemsPage extends StatefulWidget {
   const ItemsPage({super.key, required this.navToShopCart});
@@ -24,6 +25,7 @@ class _ItemsPageState extends State<ItemsPage> {
   double? minPrice;
   double? maxPrice;
   bool showDishwasherSafe = false;
+  List<String> materials = [];
 
   @override
   void initState() {
@@ -64,7 +66,12 @@ class _ItemsPageState extends State<ItemsPage> {
         favorite: !this_item.favorite,
         shopcart: this_item.shopcart,
         count: this_item.count);
-    ApiService().addProductFavorite(new_item, userEmail!);
+    if (!this_item.favorite) {
+      ApiService().addProductFavorite(new_item, userEmail!);
+    } else {
+      ApiService().deleteProductFavorite(userEmail!, new_item.id);
+    }
+
     setState(() {
       UpdatedItemsList.elementAt(
               UpdatedItemsList.indexWhere((el) => el.id == this_item.id))
@@ -73,7 +80,7 @@ class _ItemsPageState extends State<ItemsPage> {
   }
 
   void AddShopCart(Items this_item) async {
-    if (!this_item.favorite) {
+    if (!this_item.shopcart) {
       Items new_item = Items(
           id: this_item.id,
           name: this_item.name,
@@ -83,9 +90,7 @@ class _ItemsPageState extends State<ItemsPage> {
           favorite: !this_item.favorite,
           shopcart: this_item.shopcart,
           count: this_item.count);
-      ApiService().updateProductStatus(new_item);
-    } else {
-      ApiService().deleteProductFavorite(userEmail!, this_item.id);
+      ApiService().addProductShopCart(new_item, userEmail!);
     }
     setState(() {
       UpdatedItemsList.elementAt(
@@ -178,147 +183,16 @@ class _ItemsPageState extends State<ItemsPage> {
     });
   }
 
-  void _filterItems() {
-    bool localShowDishwasherSafe = showDishwasherSafe;
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: const Color.fromARGB(255, 255, 246, 218),
-          title: const Center(child: Text('Фильтр товаров')),
-          content: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Цена от ',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: 40,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          minPrice = double.tryParse(value);
-                        },
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: const EdgeInsets.only(
-                              right: 10, left: 10, bottom: 0, top: 0),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                                color: Color.fromRGBO(255, 160, 0, 1),
-                                width: 1),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                                color: Color.fromRGBO(255, 160, 0, 1),
-                                width: 2),
-                          ),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.black,
-                        ),
-                        cursorHeight: 20.0,
-                      ),
-                    ),
-                    const Text(
-                      ' до ',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: 40,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          maxPrice = double.tryParse(value);
-                        },
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: const EdgeInsets.only(
-                              right: 10, left: 10, bottom: 0, top: 0),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                                color: Color.fromRGBO(255, 160, 0, 1),
-                                width: 1),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                                color: Color.fromRGBO(255, 160, 0, 1),
-                                width: 2),
-                          ),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.black,
-                        ),
-                        cursorHeight: 20.0,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                        value: localShowDishwasherSafe,
-                        onChanged: (value) {
-                          localShowDishwasherSafe = value ?? false;
-                          setState(() {});
-                        },
-                        activeColor: Colors.amber[700]),
-                    Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: const Text('Можно мыть в посудомоечной машине',
-                            softWrap: true, style: TextStyle(fontSize: 14))),
-                  ],
-                ),
-                const SizedBox(
-                  height: 40,
-                )
-              ],
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-              style:
-                  ElevatedButton.styleFrom(backgroundColor: Colors.amber[700]),
-              onPressed: () {
-                Navigator.of(context).pop();
-                setState(() {
-                  showDishwasherSafe = localShowDishwasherSafe;
-                });
-                _applyFilters();
-              },
-              child: const Text('Применить',
-                  style: TextStyle(color: Colors.black, fontSize: 14.0)),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Отмена',
-                  style: TextStyle(color: Colors.black, fontSize: 14.0)),
-            ),
-          ],
-        );
-      },
-    );
+  void _filterItems() async {
+    final answer = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Filters()));
+    setState(() {
+      minPrice = answer['minPrice'];
+      maxPrice = answer['maxPrice'];
+      showDishwasherSafe = answer['showDishwasherSafe'];
+      materials = answer['materials'];
+      _applyFilters();
+    });
   }
 
   void _applyFilters() {
@@ -335,7 +209,14 @@ class _ItemsPageState extends State<ItemsPage> {
                   .toLowerCase()
                   .contains("можно мыть в посудомоечной машине");
 
-          return matchesPrice && matchesDishwasherSafe;
+          bool matchesMaterials = materials.isEmpty ||
+              materials.any((material) {
+                return item.describtion
+                    .toLowerCase()
+                    .contains(material.toLowerCase());
+              });
+
+          return matchesPrice && matchesDishwasherSafe && matchesMaterials;
         }).toList();
 
         return UpdatedItemsList;
@@ -433,7 +314,11 @@ class _ItemsPageState extends State<ItemsPage> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.filter_list),
-                        onPressed: _filterItems,
+                        onPressed: () => {
+                          setState(() {
+                            _filterItems();
+                          })
+                        },
                       ),
                     ],
                   ),

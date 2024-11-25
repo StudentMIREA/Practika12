@@ -66,7 +66,7 @@ class _FavoritePageState extends State<FavoritePage> {
         describtion: this_item.describtion,
         favorite: this_item.favorite,
         shopcart: !this_item.shopcart,
-        count: 1);
+        count: this_item.count);
     ApiService().addProductShopCart(new_item, userEmail!);
     setState(() {
       UpdatedItemsFavList.elementAt(
@@ -88,7 +88,7 @@ class _FavoritePageState extends State<FavoritePage> {
         favorite: this_item.favorite,
         shopcart: this_item.shopcart,
         count: this_item.count + 1);
-    ApiService().updateProductStatus(new_item);
+    ApiService().updateProductShopCart(new_item, userEmail!);
     setState(() {
       UpdatedItemsFavList.elementAt(
               UpdatedItemsFavList.indexWhere((el) => el.id == this_item.id))
