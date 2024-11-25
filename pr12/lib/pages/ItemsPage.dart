@@ -179,35 +179,95 @@ class _ItemsPageState extends State<ItemsPage> {
   }
 
   void _filterItems() {
+    bool localShowDishwasherSafe = showDishwasherSafe;
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Фильтр товаров'),
+          backgroundColor: const Color.fromARGB(255, 255, 246, 218),
+          title: const Center(child: Text('Фильтр товаров')),
           content: Container(
+            width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                const SizedBox(
+                  height: 40,
+                ),
                 Row(
                   children: [
-                    Text('Цена от '),
+                    const Text(
+                      'Цена от ',
+                      style: TextStyle(fontSize: 14),
+                    ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.2,
+                      height: 40,
                       child: TextField(
                         keyboardType: TextInputType.number,
                         onChanged: (value) {
                           minPrice = double.tryParse(value);
                         },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.only(
+                              right: 10, left: 10, bottom: 0, top: 0),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(
+                                color: Color.fromRGBO(255, 160, 0, 1),
+                                width: 1),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(
+                                color: Color.fromRGBO(255, 160, 0, 1),
+                                width: 2),
+                          ),
+                        ),
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black,
+                        ),
+                        cursorHeight: 20.0,
                       ),
                     ),
-                    Text(' до '),
+                    const Text(
+                      ' до ',
+                      style: TextStyle(fontSize: 14),
+                    ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.2,
+                      height: 40,
                       child: TextField(
                         keyboardType: TextInputType.number,
                         onChanged: (value) {
                           maxPrice = double.tryParse(value);
                         },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.only(
+                              right: 10, left: 10, bottom: 0, top: 0),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(
+                                color: Color.fromRGBO(255, 160, 0, 1),
+                                width: 1),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(
+                                color: Color.fromRGBO(255, 160, 0, 1),
+                                width: 2),
+                          ),
+                        ),
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black,
+                        ),
+                        cursorHeight: 20.0,
                       ),
                     ),
                   ],
@@ -218,35 +278,42 @@ class _ItemsPageState extends State<ItemsPage> {
                 Row(
                   children: [
                     Checkbox(
-                      value: showDishwasherSafe,
-                      onChanged: (value) {
-                        setState(() {
-                          showDishwasherSafe = !showDishwasherSafe;
-                        });
-                      },
-                    ),
+                        value: localShowDishwasherSafe,
+                        onChanged: (value) {
+                          localShowDishwasherSafe = value ?? false;
+                          setState(() {});
+                        },
+                        activeColor: Colors.amber[700]),
                     Container(
                         width: MediaQuery.of(context).size.width * 0.5,
-                        child: const Text(
-                          'Можно мыть в посудомоечной машине',
-                          softWrap: true,
-                        )),
+                        child: const Text('Можно мыть в посудомоечной машине',
+                            softWrap: true, style: TextStyle(fontSize: 14))),
                   ],
                 ),
+                const SizedBox(
+                  height: 40,
+                )
               ],
             ),
           ),
           actions: [
-            TextButton(
+            ElevatedButton(
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.amber[700]),
               onPressed: () {
                 Navigator.of(context).pop();
+                setState(() {
+                  showDishwasherSafe = localShowDishwasherSafe;
+                });
                 _applyFilters();
               },
-              child: const Text('Применить'),
+              child: const Text('Применить',
+                  style: TextStyle(color: Colors.black, fontSize: 14.0)),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Отмена'),
+              child: const Text('Отмена',
+                  style: TextStyle(color: Colors.black, fontSize: 14.0)),
             ),
           ],
         );
@@ -339,10 +406,29 @@ class _ItemsPageState extends State<ItemsPage> {
                         width: MediaQuery.of(context).size.width * 0.6,
                         child: TextField(
                           onChanged: _searchItems,
-                          decoration: const InputDecoration(
-                            labelText: 'Поиск',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.only(
+                                  right: 10, left: 10, bottom: 0, top: 0),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(255, 160, 0, 1),
+                                    width: 1),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(255, 160, 0, 1),
+                                    width: 2),
+                              ),
+                              labelText: 'Поиск'),
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.black,
                           ),
+                          cursorHeight: 20.0,
                         ),
                       ),
                       IconButton(
@@ -528,70 +614,67 @@ class _ItemsPageState extends State<ItemsPage> {
                                                         const EdgeInsets.only(
                                                             left: 5.0,
                                                             right: 5.0),
-                                                    child: Expanded(
-                                                      child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            IconButton(
-                                                                icon: Icon(Icons
-                                                                    .remove),
-                                                                onPressed:
-                                                                    () => {
-                                                                          decrement(
-                                                                              UpdatedItemsList.elementAt(index))
-                                                                        }),
-                                                            Container(
-                                                              height: 25.0,
-                                                              width: 30.0,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5.0),
-                                                                border: Border.all(
-                                                                    color: const Color
-                                                                        .fromRGBO(
-                                                                        255,
-                                                                        160,
-                                                                        0,
-                                                                        1),
-                                                                    width: 2),
-                                                              ),
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        1.0),
-                                                                child: Text(
-                                                                  UpdatedItemsList
-                                                                          .elementAt(
-                                                                              index)
-                                                                      .count
-                                                                      .toString(),
-                                                                  style: const TextStyle(
-                                                                      fontSize:
-                                                                          14.0,
-                                                                      color: Colors
-                                                                          .black),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                ),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          IconButton(
+                                                              icon: Icon(
+                                                                  Icons.remove),
+                                                              onPressed:
+                                                                  () => {
+                                                                        decrement(
+                                                                            UpdatedItemsList.elementAt(index))
+                                                                      }),
+                                                          Container(
+                                                            height: 25.0,
+                                                            width: 30.0,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0),
+                                                              border: Border.all(
+                                                                  color: const Color
+                                                                      .fromRGBO(
+                                                                      255,
+                                                                      160,
+                                                                      0,
+                                                                      1),
+                                                                  width: 2),
+                                                            ),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              child: Text(
+                                                                UpdatedItemsList
+                                                                        .elementAt(
+                                                                            index)
+                                                                    .count
+                                                                    .toString(),
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14.0,
+                                                                    color: Colors
+                                                                        .black),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                               ),
                                                             ),
-                                                            IconButton(
-                                                                icon: Icon(
-                                                                    Icons.add),
-                                                                onPressed:
-                                                                    () => {
-                                                                          increment(
-                                                                              UpdatedItemsList.elementAt(index))
-                                                                        }),
-                                                          ]),
-                                                    ),
+                                                          ),
+                                                          IconButton(
+                                                              icon: Icon(
+                                                                  Icons.add),
+                                                              onPressed:
+                                                                  () => {
+                                                                        increment(
+                                                                            UpdatedItemsList.elementAt(index))
+                                                                      }),
+                                                        ]),
                                                   ),
                                                 )
                                               //Добавление в корзину
