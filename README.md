@@ -38,12 +38,12 @@
 
 <img src="https://github.com/user-attachments/assets/337b744e-04a2-4fd3-97b0-69cd1615a3e1" width="300">
 
-Добавлены фильтры. При нажатии на иконку фильтров появляется диалоговое окно, где можно выбрать стоимость товара и выбрать категорию товара.
+Добавлены фильтры. При нажатии на иконку фильтров осуществляется переход на страницу фильтров, где можно выбрать стоимость товара и выбрать категорию товара.
 
-<img src="https://github.com/user-attachments/assets/954594ae-0974-4856-920b-9431fc89e928" width="300">
+<img src="https://github.com/user-attachments/assets/20aba2c3-101a-4731-98ca-f384f48bbea2" width="300">
 
 #### Конечный результат
 
-https://github.com/user-attachments/assets/96e33b49-3e50-4ecf-be26-74044961c1f9
+https://github.com/user-attachments/assets/921ee866-26c0-4527-b01e-960c65516708
 
 
